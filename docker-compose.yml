@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  prometheus:
+    image: prom/prometheus:v2.24.1
+    container_name: prometheus
+    command: --config.file=/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/alerts/:/etc/prometheus/rules.d/090"
+
+  grafana:
+    image: grafana/grafana:7.4.0
+    container_name: grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=password
+
+
+  pushgateway:
+    image: prom/pushgateway:v1.4.0
+    container_name: pushgateway
+    restart: unless-stopped
+    ports:
+      - "9091:9091"
